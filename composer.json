@@ -1,12 +1,17 @@
 {
+	"name": "jbmcg/dropbox-dl",
+	"description": "Small command-line program to recursively download the contents of a public Dropbox folder",
 	"require": {
 		"php": ">=5.6.0",
 		"electrolinux/phpquery": "0.9.*"
 	},
 	"autoload": {
 		"files": [
-			"functions/get_dropbox_files.php",
-			"functions/println.php"
+			"src/functions/get_dropbox_files.php",
+			"src/functions/println.php"
 		]
-	}
+	},
+	"bin": [
+		"src/main.php"
+	]
 }
