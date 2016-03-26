@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+error_reporting(E_ALL ^ E_STRICT);
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 if (empty($argv[1])) {
     println();
@@ -16,13 +18,17 @@ if (empty($argv[1])) {
     exit();
 } else {
     $url = $argv[1];
+    if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+        println('ERROR: "%s" is not a valid URL.', $argv[1]);
+        exit();
+    }
     $dir = (isset($argv[2])) ? realpath($argv[2]) : getcwd();
     if ($dir === false || !is_dir($dir)) {
-        println('"%s" is not a real directory.', $argv[2]);
+        println('ERROR: "%s" is not a real directory.', $argv[2]);
         exit();
     }
     $recursive = isset($argv[3]) ? filter_var($argv[3], FILTER_VALIDATE_BOOLEAN) : true;
-    $validExtensions = [];
+    $validExtensions = array();
     foreach ($argv as $key => $value) {
         if ($key > 3) {
             $validExtensions[] = strtolower($value); // Extensions are compared in lowercase
@@ -30,7 +36,7 @@ if (empty($argv[1])) {
     }
 }
 
-$files = [];
+$files = array();
 get_dropbox_files($url, $files, $recursive, $validExtensions);
 
 foreach ($files as $folder => $folderList) {
@@ -42,8 +48,11 @@ foreach ($files as $folder => $folderList) {
     }
 
     foreach ($folderList as $fileUrl) {
+        $filename = basename(preg_replace('/\?.*/', '', urldecode($fileUrl)));
+        $destPath = $destFolder . $filename;
+
         println('Downloading %s', $fileUrl);
-        $destPath = $destFolder . basename(preg_replace('/\?.*/', '', urldecode($fileUrl)));
+
         $attempts = 3;
         while ($attempts > 0) {
             copy($fileUrl, $destPath);
@@ -51,14 +60,14 @@ foreach ($files as $folder => $folderList) {
                 break;
             } else {
                 $attempts--;
+
                 println('Retrying download of %s', $fileUrl);
             }
         }
 
         if ($attempts <= 0) {
+
             println('Failed to download %s', $fileUrl);
-            println('Aborting mission...');
-            exit();
         }
     }
 }

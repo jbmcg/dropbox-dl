@@ -1,7 +1,7 @@
 ## About
 **dropbox-dl** is a small command-line program written in PHP to recursively download the contents of a public Dropbox folder (no credentials or API key/secret required). This is a bit of a hack / workaround for Dropbox not allowing you to directly download a folder that is over 1 GB in size. See the unfortunate scenario below.
 
-![Alt text](/assets/img/sad.jpg "The zip file is too large. Please add it to your Dropbox.")
+![Alt text](dang.jpg "The zip file is too large. Please add it to your Dropbox.")
 
 ## Usage
 ```sh

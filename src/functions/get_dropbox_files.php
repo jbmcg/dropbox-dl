@@ -1,6 +1,6 @@
 <?php
 
-function get_dropbox_files($url, &$files, $recursive = true, $validExtensions = [], $folder = '/')
+function get_dropbox_files($url, &$files, $recursive = true, $validExtensions = array(), $folder = '/')
 {
     println('Checking %s', $url);
     $contents = file_get_contents($url);
@@ -11,15 +11,19 @@ function get_dropbox_files($url, &$files, $recursive = true, $validExtensions = 
         $ext = pathinfo(basename($link), PATHINFO_EXTENSION);
         if (empty($ext)) {
             if ($recursive) {
-                get_dropbox_files($link, $files, $recursive, $validExtensions, sprintf('%s%s/', $folder, basename(urldecode($link))));
+                get_dropbox_files($link, $files, $recursive, $validExtensions,
+                    sprintf('%s%s/', $folder, basename(urldecode($link))));
             }
         } else {
             $add = $link . '?dl=1';
+            if (!array_key_exists($folder, $files)) {
+                $files[$folder] = array();
+            }
             if (count($validExtensions) > 0) {
-                if (in_array(strtolower($ext), $validExtensions)) {
+                if (in_array(strtolower($ext), $validExtensions) && !in_array($add, $files[$folder])) {
                     $files[$folder][] = $add;
                 }
-            } else {
+            } elseif (!in_array($add, $files[$folder])) {
                 $files[$folder][] = $add;
             }
         }
