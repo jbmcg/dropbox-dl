@@ -5,7 +5,7 @@
 
 ## Usage
 ```sh
-dropbox-dl [url] [path] [recursive] [ext1] [ext2]...
+dropbox-dl [url] [path] [recursive] [ext1] [ext2] ...
 ```
 | parameter  |  description |
 |---|---|
