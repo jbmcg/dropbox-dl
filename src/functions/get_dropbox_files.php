@@ -6,7 +6,7 @@ function get_dropbox_files($url, &$files, $recursive = true, $validExtensions = 
     $contents = file_get_contents($url);
     /** @noinspection PhpUndefinedClassInspection */
     $doc = phpQuery::newDocumentHTML($contents);
-    foreach ($doc->find('div.filename a') as $a) {
+    foreach ($doc->find('.preview-box .sl-grid-cell a') as $a) {
         $link = preg_replace('/\?.*/', '', pq($a)->attr('href'));
         $ext = pathinfo(basename($link), PATHINFO_EXTENSION);
         if (empty($ext)) {
