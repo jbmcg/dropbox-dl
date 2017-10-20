@@ -42,7 +42,7 @@ get_dropbox_files($url, $files, $recursive, $validExtensions);
 foreach ($files as $folder => $folderList) {
 
     $destFolder = $dir . $folder;
-    if (!is_dir($destFolder)) {
+    if (!is_dir($destFolder) && count($folderList) > 0) {
         println('Creating %s', $destFolder);
         mkdir($destFolder, 0755, true);
     }
